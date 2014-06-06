@@ -6,22 +6,27 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
         android:text="Book Name"
         android:id="@+id/bookName"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textColor="@android:color/black"
+        android:textStyle="italic"
+        android:typeface="serif"
+        android:paddingTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.SearchResult.Subtitle"
         android:text="Author"
         android:id="@+id/bookAuthor"
         android:layout_below="@+id/bookName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:paddingBottom="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +34,19 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Publisher"
         android:id="@+id/bookPublisher"
-        android:layout_alignTop="@+id/textView2"
+        android:paddingBottom="20dp"
+        android:layout_below="@+id/textView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Publisher"
+        android:id="@+id/textView"
+        android:textStyle="bold"
+        android:layout_below="@+id/bookName"
+        android:layout_alignRight="@+id/bookPublisher"
+        android:layout_alignEnd="@+id/bookPublisher" />
 </RelativeLayout>

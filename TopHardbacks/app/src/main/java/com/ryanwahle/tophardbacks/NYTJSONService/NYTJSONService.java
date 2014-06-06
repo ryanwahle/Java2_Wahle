@@ -9,6 +9,8 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.ryanwahle.tophardbacks.Utility.DataStorageSingleton;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -57,12 +59,13 @@ public class NYTJSONService extends IntentService {
             Log.e(TAG, "IOException" + ex);
         }
 
+        DataStorageSingleton.getInstance().saveJSONDataToDisk(this, bufferStringBuilder.toString());
+
         Bundle intentExtras = arg0.getExtras();
         Messenger intentMessenger = (Messenger) intentExtras.get("messenger");
 
         Message returnMessage = Message.obtain();
         returnMessage.arg1 = Activity.RESULT_OK;
-        returnMessage.obj = bufferStringBuilder.toString();
 
         try {
             intentMessenger.send(returnMessage);
@@ -71,4 +74,6 @@ public class NYTJSONService extends IntentService {
         }
 
     }
+
+
 }
