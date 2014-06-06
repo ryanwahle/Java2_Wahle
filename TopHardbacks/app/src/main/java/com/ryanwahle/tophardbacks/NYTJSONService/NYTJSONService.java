@@ -1,3 +1,10 @@
+/*
+    Author:     Ryan Wahle
+    Date:       5 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.NYTJSONService;
 
 import android.app.Activity;
@@ -17,8 +24,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-/**
- * Created by ryanwahle on 6/4/14.
+/*
+    This class grabs the JSON data from the NYTimes Top 20 Hardback Book RESTful web
+    service that they provide.
  */
 public class NYTJSONService extends IntentService {
 
@@ -38,6 +46,9 @@ public class NYTJSONService extends IntentService {
             Log.e(TAG, "MalformedURLException: " + ex);
         }
 
+        /*
+            Grab the JSON data from the web service.
+         */
         URLConnection remoteURLConnection = null;
         BufferedInputStream remoteDataBufferedInputStream = null;
         StringBuilder bufferStringBuilder = new StringBuilder();
@@ -59,6 +70,11 @@ public class NYTJSONService extends IntentService {
             Log.e(TAG, "IOException" + ex);
         }
 
+        /*
+            Store the JSON data using the DataStorageSingleton and then alert the
+            messenger that we are done getting the data and the calling Activity can
+            use it how they wish.
+         */
         DataStorageSingleton.getInstance().saveJSONDataToDisk(this, bufferStringBuilder.toString());
 
         Bundle intentExtras = arg0.getExtras();
@@ -74,6 +90,4 @@ public class NYTJSONService extends IntentService {
         }
 
     }
-
-
 }

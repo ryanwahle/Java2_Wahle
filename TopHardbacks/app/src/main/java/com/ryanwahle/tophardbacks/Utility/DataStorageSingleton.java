@@ -1,3 +1,10 @@
+/*
+    Author:     Ryan Wahle
+    Date:       5 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.Utility;
 
 import android.content.Context;
@@ -9,6 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/*
+    This call reads and writes the JSON data to a local file for future
+    retrieval.
+ */
 public class DataStorageSingleton {
     private static DataStorageSingleton instance = null;
     private static String TAG = "DataStorageSingleton";
@@ -26,6 +37,9 @@ public class DataStorageSingleton {
         return instance;
     }
 
+    /*
+        Save a string of data to disk.
+     */
     public void saveJSONDataToDisk(Context context, String dataToSave) {
         try {
             FileOutputStream jsonFileOutputStream = context.openFileOutput(localFilenameString, Context.MODE_PRIVATE);
@@ -39,6 +53,9 @@ public class DataStorageSingleton {
         }
     }
 
+    /*
+        Read data from a local file and return the contents in a String.
+     */
     public String readSavedJSONDataFromDisk(Context context) {
         StringBuilder jsonDataStringBuilder = new StringBuilder();
 

@@ -1,3 +1,10 @@
+/*
+    Author:     Ryan Wahle
+    Date:       5 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.Utility;
 
 import android.content.Context;
@@ -5,8 +12,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-/**
- * Created by ryanwahle on 6/5/14.
+/*
+    This class provides a method to check to see if there is any internet
+    service available.
  */
 public class InternetAccessSingleton {
         private static InternetAccessSingleton instance = null;

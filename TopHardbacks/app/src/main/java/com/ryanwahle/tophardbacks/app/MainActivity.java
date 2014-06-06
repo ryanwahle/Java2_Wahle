@@ -1,3 +1,10 @@
+/*
+    Author:     Ryan Wahle
+    Date:       5 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.app;
 
 import android.app.Activity;
@@ -9,6 +16,7 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.ryanwahle.tophardbacks.Utility.DataStorageSingleton;
 import com.ryanwahle.tophardbacks.NYTJSONService.NYTJSONService;
@@ -26,6 +34,9 @@ public class MainActivity extends Activity {
 
     static String TAG = "MainActivity";
 
+    /*
+        This is called when the service has completed letting us know to load the data.
+     */
     final Handler nytJSONServiceHandler = new Handler() {
         public void handleMessage(Message message) {
             if (message.arg1 == RESULT_OK) {
@@ -35,6 +46,10 @@ public class MainActivity extends Activity {
         }
     };
 
+    /*
+        Read the data from the local JSON file and populate the listView and also
+        add a header to the listView.
+     */
     private void populateListView() {
         String localJSONDataString = DataStorageSingleton.getInstance().readSavedJSONDataFromDisk(this);
         ArrayList<HashMap<String, String>> booksArrayList = new ArrayList<HashMap<String, String>>();
@@ -43,6 +58,10 @@ public class MainActivity extends Activity {
             JSONObject nytJSONObject = new JSONObject(localJSONDataString);
             JSONArray bookResultsJSONArray = nytJSONObject.getJSONArray("results");
 
+            /*
+                Loop through the JSONArray and grab a couple of fields from the JSONObject and
+                put them in a HashMap.
+             */
             for (int arrayIndex = 0; arrayIndex < bookResultsJSONArray.length(); arrayIndex++) {
                 String bookNameString = bookResultsJSONArray.getJSONObject(arrayIndex).getJSONArray("book_details").getJSONObject(0).getString("title");
                 String bookAuthorString = bookResultsJSONArray.getJSONObject(arrayIndex).getJSONArray("book_details").getJSONObject(0).getString("author");
@@ -79,9 +98,20 @@ public class MainActivity extends Activity {
         Intent nytJSONServiceIntent = new Intent(this, NYTJSONService.class);
         nytJSONServiceIntent.putExtra("messenger", nytJSONServiceMessenger);
 
+        /*
+            Check to see if the internet is available. If it is then start the service.
+            If it's not available then try and get local file, and if there is no
+            local file then display a message telling the user no internet is available.
+         */
+
         if (InternetAccessSingleton.getInstance().isInternetAvailable(this)) {
-            Log.v(TAG, "Internet Access Available");
             startService(nytJSONServiceIntent);
+        } else {
+            if (DataStorageSingleton.getInstance().readSavedJSONDataFromDisk(this).isEmpty()) {
+                Toast.makeText(this, "Enable internet access to use this app!", Toast.LENGTH_LONG).show();
+            } else {
+                populateListView();
+            }
         }
     }
 
