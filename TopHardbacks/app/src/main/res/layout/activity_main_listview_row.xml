@@ -49,4 +49,5 @@
         android:layout_below="@+id/bookName"
         android:layout_alignRight="@+id/bookPublisher"
         android:layout_alignEnd="@+id/bookPublisher" />
+
 </RelativeLayout>
