@@ -44,13 +44,13 @@ public class BookDetailsActivity extends Activity {
     }
 
     public void loadAmazonBookWebpage (View view) {
-        String amazonBookURLString = "http://www.amazon.com/gp/search/ref=sr_adv_b/?search-alias=stripbooks&unfiltered=1&field-keywords=&field-author=&field-title=&field-isbn=9780399167317&field-publisher=&node=&field-p_n_condition-type=&field-feature_browse-bin=&field-subject=&field-language=&field-dateop=During&field-datemod=&field-dateyear=&sort=relevanceexprank&Adv-Srch-Books-Submit.x=28&Adv-Srch-Books-Submit.y=8";
+        String amazonBookURLString = "http://www.amazon.com/gp/search/ref=sr_adv_b/?search-alias=stripbooks&unfiltered=1&field-keywords=&field-author=&field-title=&field-isbn=" + bookISBNTextView.getText() + "&field-publisher=&node=&field-p_n_condition-type=&field-feature_browse-bin=&field-subject=&field-language=&field-dateop=During&field-datemod=&field-dateyear=&sort=relevanceexprank&Adv-Srch-Books-Submit.x=28&Adv-Srch-Books-Submit.y=8";
         Uri amazonBookUri = Uri.parse(amazonBookURLString);
 
         Intent amazonBookIntent = new Intent(Intent.ACTION_VIEW, amazonBookUri);
-        if (amazonBookIntent.resolveActivity(getPackageManager()) != null) {
-            startService(amazonBookIntent);
-        }
+
+        startActivityForResult(amazonBookIntent, 0);
+
     }
 }
 

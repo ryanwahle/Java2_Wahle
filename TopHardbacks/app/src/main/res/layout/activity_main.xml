@@ -11,6 +11,6 @@
         android:layout_gravity="center_horizontal"
         android:background="@android:color/holo_orange_light"
         android:paddingBottom="20dp"
-        android:dividerHeight="20dp"
+        android:dividerHeight="0dp"
         android:divider="@android:color/holo_orange_light" />
 </LinearLayout>
