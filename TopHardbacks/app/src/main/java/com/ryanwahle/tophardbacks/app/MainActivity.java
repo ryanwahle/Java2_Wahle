@@ -132,7 +132,6 @@ public class MainActivity extends Activity {
     }
 
     public void loadBookDetails(int row) {
-
         HashMap<String, String> bookItemHashMap = booksArrayList.get(row);
 
         String bookName = bookItemHashMap.get("bookName").toString();
@@ -150,8 +149,6 @@ public class MainActivity extends Activity {
         bookDetailsIntent.putExtra("bookISBN", bookISBN);
 
         startActivityForResult(bookDetailsIntent, 0);
-
-
     }
 
 
