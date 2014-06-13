@@ -1,13 +1,26 @@
+/*
+    Author:     Ryan Wahle
+    Date:       12 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.app;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
-
+/*
+    This activity displays more book details to the user
+    and allows them to buy the book on Amazon and rate
+    the book.
+ */
 public class BookDetailsActivity extends Activity {
 
     TextView bookNameTextView = null;
@@ -16,12 +29,20 @@ public class BookDetailsActivity extends Activity {
     TextView bookISBNTextView = null;
     TextView bookDescriptionTextView = null;
 
+    RatingBar bookRatingBar = null;
+
+    Bundle sentData = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
-        Bundle sentData = getIntent().getExtras();
+        /*
+            Get the passed in data from the other activity
+            and display it on screen.
+        */
+        sentData = getIntent().getExtras();
         if (sentData != null) {
             String bookName = sentData.getString("bookName");
             String bookAuthor = sentData.getString("bookAuthor");
@@ -43,6 +64,26 @@ public class BookDetailsActivity extends Activity {
         }
     }
 
+    /*
+        Pass back the book rating to the calling activity.
+    */
+    @Override
+    public void finish() {
+        Intent bookRatingReturnDataIntent = new Intent();
+
+        bookRatingBar = (RatingBar) findViewById(R.id.bookratingBar);
+        bookRatingReturnDataIntent.putExtra("bookRating", bookRatingBar.getRating());
+
+        bookRatingReturnDataIntent.putExtra("bookISBN", sentData.getString("bookISBN"));
+
+        setResult(RESULT_OK, bookRatingReturnDataIntent);
+        Log.v("BOOKS", "FINISHED");
+        super.finish();
+    }
+
+    /*
+        Load up Amazon with the book via the ISBN number.
+    */
     public void loadAmazonBookWebpage (View view) {
         String amazonBookURLString = "http://www.amazon.com/gp/search/ref=sr_adv_b/?search-alias=stripbooks&unfiltered=1&field-keywords=&field-author=&field-title=&field-isbn=" + bookISBNTextView.getText() + "&field-publisher=&node=&field-p_n_condition-type=&field-feature_browse-bin=&field-subject=&field-language=&field-dateop=During&field-datemod=&field-dateyear=&sort=relevanceexprank&Adv-Srch-Books-Submit.x=28&Adv-Srch-Books-Submit.y=8";
         Uri amazonBookUri = Uri.parse(amazonBookURLString);
@@ -52,6 +93,8 @@ public class BookDetailsActivity extends Activity {
         startActivityForResult(amazonBookIntent, 0);
 
     }
+
+
 }
 
 /*

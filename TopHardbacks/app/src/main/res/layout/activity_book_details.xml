@@ -81,4 +81,14 @@
         android:layout_marginTop="30dp"
         android:onClick="loadAmazonBookWebpage"
         android:enabled="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bookratingBar"
+        android:layout_gravity="center_horizontal"
+        android:numStars="3"
+        android:stepSize="1.0"
+        android:rating="0.0" />
+
 </LinearLayout>

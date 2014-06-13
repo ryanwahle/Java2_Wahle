@@ -1,6 +1,6 @@
 /*
     Author:     Ryan Wahle
-    Date:       5 June 2014
+    Date:       12 June 2014
     School:     Full Sail University
     Class:      Java 2 1406
 */
@@ -8,6 +8,7 @@
 package com.ryanwahle.tophardbacks.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +38,7 @@ public class MainActivity extends Activity {
 
     static String TAG = "MainActivity";
     ArrayList<HashMap<String, String>> booksArrayList = null;
+    ArrayList<HashMap<String, Float>> bookRatingsArrayList = null;
 
     /*
         This is called when the service has completed letting us know to load the data.
@@ -113,32 +116,55 @@ public class MainActivity extends Activity {
         nytJSONServiceIntent.putExtra("messenger", nytJSONServiceMessenger);
 
         /*
-            Check to see if the internet is available. If it is then start the service.
-            If it's not available then try and get local file, and if there is no
-            local file then display a message telling the user no internet is available.
-         */
-
-        if (InternetAccessSingleton.getInstance().isInternetAvailable(this)) {
-            startService(nytJSONServiceIntent);
+            If there is saved state instance then use that data instead of
+            getting it from disk or the internet.
+        */
+        if (savedInstanceState != null) {
+            booksArrayList = (ArrayList<HashMap<String, String>>) savedInstanceState.getSerializable("savedInstanceData");
+            Log.v(TAG, "POPULATING WITH SAVED DATA");
+            populateListView();
         } else {
-            if (DataStorageSingleton.getInstance().readSavedJSONDataFromDisk(this).isEmpty()) {
-                Toast.makeText(this, "Enable internet access to use this app!", Toast.LENGTH_LONG).show();
+            /*
+                Check to see if the internet is available. If it is then start the service.
+                If it's not available then try and get local file, and if there is no
+                local file then display a message telling the user no internet is available.
+            */
+            if (InternetAccessSingleton.getInstance().isInternetAvailable(this)) {
+                startService(nytJSONServiceIntent);
             } else {
-                populateListView();
-
-
+                if (DataStorageSingleton.getInstance().readSavedJSONDataFromDisk(this).isEmpty()) {
+                    Toast.makeText(this, "Enable internet access to use this app!", Toast.LENGTH_LONG).show();
+                } else {
+                    populateListView();
+                }
             }
+        }
+
+    }
+
+    /*
+        Save any data needed to a saved state instance.
+    */
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        if (booksArrayList != null && !booksArrayList.isEmpty()) {
+            savedInstanceState.putSerializable("savedInstanceData", (Serializable) booksArrayList);
         }
     }
 
+    /*
+        Load up the Book Details Activity and send the book data.
+    */
     public void loadBookDetails(int row) {
         HashMap<String, String> bookItemHashMap = booksArrayList.get(row);
 
-        String bookName = bookItemHashMap.get("bookName").toString();
-        String bookAuthor = bookItemHashMap.get("bookAuthor").toString();
-        String bookPublisher = bookItemHashMap.get("bookPublisher").toString();
-        String bookDescription = bookItemHashMap.get("bookDescription").toString();
-        String bookISBN = bookItemHashMap.get("bookISBN").toString();
+        String bookName = bookItemHashMap.get("bookName");
+        String bookAuthor = bookItemHashMap.get("bookAuthor");
+        String bookPublisher = bookItemHashMap.get("bookPublisher");
+        String bookDescription = bookItemHashMap.get("bookDescription");
+        String bookISBN = bookItemHashMap.get("bookISBN");
 
         Intent bookDetailsIntent = new Intent(this, BookDetailsActivity.class);
 
@@ -151,6 +177,39 @@ public class MainActivity extends Activity {
         startActivityForResult(bookDetailsIntent, 0);
     }
 
+    /*
+        This is called after the Book Details Activity is finished. Find the book
+        rating and save it to disk, then show an alert to the user stating it has
+        been saved.
+    */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == 0) {
+            Bundle bookRatingResultBundle = data.getExtras();
 
+            if (bookRatingsArrayList == null) {
+                bookRatingsArrayList = new ArrayList<HashMap<String, Float>>();
+            }
 
+            HashMap<String, Float> bookRatingHashMap = new HashMap<String, Float>();
+            bookRatingHashMap.put(bookRatingResultBundle.getString("bookISBN"), bookRatingResultBundle.getFloat("bookRating"));
+
+            bookRatingsArrayList.add(bookRatingHashMap);
+
+            DataStorageSingleton.getInstance().saveBookRatingsToDisk(this, bookRatingsArrayList);
+            showAlert("You rated this book " + bookRatingResultBundle.getFloat("bookRating") + " Stars!");
+        }
+    }
+
+    /*
+        Show an alert to the user based on the string inputted.
+    */
+    private void showAlert (String alertText) {
+        AlertDialog.Builder alertBox = new AlertDialog.Builder(this);
+        alertBox.setTitle("Rating Saved To Disk");
+        alertBox.setMessage(alertText);
+        alertBox.setPositiveButton("OK", null);
+        alertBox.setCancelable(false);
+        alertBox.create().show();
+    }
 }
