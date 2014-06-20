@@ -9,6 +9,7 @@ package com.ryanwahle.tophardbacks.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,12 @@ public class BookDetailsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_book_details);
 
         /*
@@ -69,14 +76,18 @@ public class BookDetailsActivity extends Activity {
     */
     @Override
     public void finish() {
-        Intent bookRatingReturnDataIntent = new Intent();
+        Log.v("BOOKS", "STARTING FINISH");
 
-        bookRatingBar = (RatingBar) findViewById(R.id.bookratingBar);
-        bookRatingReturnDataIntent.putExtra("bookRating", bookRatingBar.getRating());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Intent bookRatingReturnDataIntent = new Intent();
 
-        bookRatingReturnDataIntent.putExtra("bookISBN", sentData.getString("bookISBN"));
+            bookRatingBar = (RatingBar) findViewById(R.id.bookratingBar);
+            bookRatingReturnDataIntent.putExtra("bookRating", bookRatingBar.getRating());
 
-        setResult(RESULT_OK, bookRatingReturnDataIntent);
+            bookRatingReturnDataIntent.putExtra("bookISBN", sentData.getString("bookISBN"));
+
+            setResult(RESULT_OK, bookRatingReturnDataIntent);
+        }
         Log.v("BOOKS", "FINISHED");
         super.finish();
     }
