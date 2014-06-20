@@ -1,0 +1,15 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/booksListView"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/holo_orange_light"
+            android:paddingBottom="20dp"
+            android:dividerHeight="0dp"
+            android:divider="@android:color/holo_orange_light" />
+    </LinearLayout>

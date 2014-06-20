@@ -15,8 +15,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -34,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements BookListFragment.BookSelectedListener {
 
     static String TAG = "MainActivity";
     ArrayList<HashMap<String, String>> booksArrayList = null;
@@ -96,13 +94,11 @@ public class MainActivity extends Activity {
 
         booksListView.addHeaderView(getLayoutInflater().inflate(R.layout.activity_listview_header, null));
         booksListView.setAdapter(booksListViewAdaptor);
+    }
 
-        booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                loadBookDetails(i - 1);
-            }
-        });
+    @Override
+    public void BookSelected(int row) {
+        loadBookDetails(row);
     }
 
     @Override
