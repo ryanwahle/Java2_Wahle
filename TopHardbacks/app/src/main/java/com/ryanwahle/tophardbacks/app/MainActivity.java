@@ -17,6 +17,7 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ryanwahle.tophardbacks.NYTJSONService.NYTJSONService;
@@ -162,15 +163,30 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         String bookDescription = bookItemHashMap.get("bookDescription");
         String bookISBN = bookItemHashMap.get("bookISBN");
 
-        Intent bookDetailsIntent = new Intent(this, BookDetailsActivity.class);
+        BookDetailsFragment bookDetailsFragment = (BookDetailsFragment) getFragmentManager().findFragmentById(R.id.fragment_book_details);
+        if (bookDetailsFragment != null && bookDetailsFragment.isInLayout()) {
+            TextView bookNameTextView = (TextView) bookDetailsFragment.getView().findViewById(R.id.bookNameTextView);
+            TextView bookAuthorTextView = (TextView) bookDetailsFragment.getView().findViewById(R.id.bookAuthorTextView);
+            TextView bookPublisherTextView = (TextView) bookDetailsFragment.getView().findViewById(R.id.bookPublisherTextView);
+            TextView bookISBNTextView = (TextView) bookDetailsFragment.getView().findViewById(R.id.bookISBNTextView);
+            TextView bookDescriptionTextView = (TextView) bookDetailsFragment.getView().findViewById(R.id.bookDescriptionTextView);
 
-        bookDetailsIntent.putExtra("bookName", bookName);
-        bookDetailsIntent.putExtra("bookAuthor", bookAuthor);
-        bookDetailsIntent.putExtra("bookPublisher", bookPublisher);
-        bookDetailsIntent.putExtra("bookDescription", bookDescription);
-        bookDetailsIntent.putExtra("bookISBN", bookISBN);
+            bookNameTextView.setText(bookName);
+            bookAuthorTextView.setText(bookAuthor);
+            bookPublisherTextView.setText("Published by " + bookPublisher);
+            bookISBNTextView.setText("ISBN: " + bookISBN);
+            bookDescriptionTextView.setText("\"" + bookDescription + "\"");
+        } else {
+            Intent bookDetailsIntent = new Intent(this, BookDetailsActivity.class);
 
-        startActivityForResult(bookDetailsIntent, 0);
+            bookDetailsIntent.putExtra("bookName", bookName);
+            bookDetailsIntent.putExtra("bookAuthor", bookAuthor);
+            bookDetailsIntent.putExtra("bookPublisher", bookPublisher);
+            bookDetailsIntent.putExtra("bookDescription", bookDescription);
+            bookDetailsIntent.putExtra("bookISBN", bookISBN);
+
+            startActivityForResult(bookDetailsIntent, 0);
+        }
     }
 
     /*
