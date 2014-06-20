@@ -1,5 +1,11 @@
-package com.ryanwahle.tophardbacks.app;
+/*
+    Author:     Ryan Wahle
+    Date:       19 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
 
+package com.ryanwahle.tophardbacks.app;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,11 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-
-/**
- * A simple {@link Fragment} subclass.
- *
+/*
+    This loads the fragment_book_details and returns the view
+    to be displayed on the screen.
  */
 public class BookDetailsFragment extends Fragment {
     @Override

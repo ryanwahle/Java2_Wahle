@@ -1,6 +1,6 @@
 /*
     Author:     Ryan Wahle
-    Date:       12 June 2014
+    Date:       19 June 2014
     School:     Full Sail University
     Class:      Java 2 1406
 */
@@ -32,7 +32,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/*
+    This is the main activity and implements ths interface for the BookListFragment
+    class, so when a book is clicked, it loads the appropriate book data.
+ */
 public class MainActivity extends Activity implements BookListFragment.BookSelectedListener {
 
     static String TAG = "MainActivity";
@@ -97,6 +100,10 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         booksListView.setAdapter(booksListViewAdaptor);
     }
 
+    /*
+        This is the required method to implement for the BookListFragment class.
+        This method will be called when a user selects a book from the list.
+     */
     @Override
     public void BookSelected(int row) {
         loadBookDetails(row);
@@ -163,6 +170,10 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         String bookDescription = bookItemHashMap.get("bookDescription");
         String bookISBN = bookItemHashMap.get("bookISBN");
 
+        /*
+            If the fragment is in view (aka landscape mode) then directly access
+            the fragment, otherwise create a new Intent and send the data that way.
+         */
         BookDetailsFragment bookDetailsFragment = (BookDetailsFragment) getFragmentManager().findFragmentById(R.id.fragment_book_details);
         if (bookDetailsFragment != null && bookDetailsFragment.isInLayout()) {
             TextView bookNameTextView = (TextView) bookDetailsFragment.getView().findViewById(R.id.bookNameTextView);

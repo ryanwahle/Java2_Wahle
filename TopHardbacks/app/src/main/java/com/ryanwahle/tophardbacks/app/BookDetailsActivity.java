@@ -1,6 +1,6 @@
 /*
     Author:     Ryan Wahle
-    Date:       12 June 2014
+    Date:       19 June 2014
     School:     Full Sail University
     Class:      Java 2 1406
 */
@@ -38,6 +38,10 @@ public class BookDetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*
+            If orientation is in landscape mode, then exit because the BookDetailsFragment
+            class will be called instead.
+         */
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();
             return;
