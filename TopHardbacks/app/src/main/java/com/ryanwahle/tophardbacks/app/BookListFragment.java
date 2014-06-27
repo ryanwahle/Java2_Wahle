@@ -10,6 +10,7 @@ package com.ryanwahle.tophardbacks.app;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,9 @@ public class BookListFragment extends Fragment implements ListView.OnItemClickLi
             Set the onItemClick to this class which we implemented.
          */
         booksListView.setOnItemClickListener(this);
+
+        Integer currentSelectedRow = ((MainActivity) getActivity()).currentSelectedRow;
+        Log.v("ROW: ", "" + currentSelectedRow);
 
         return view;
     }

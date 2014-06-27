@@ -15,6 +15,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -41,6 +44,8 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
     static String TAG = "MainActivity";
     ArrayList<HashMap<String, String>> booksArrayList = null;
     ArrayList<HashMap<String, Float>> bookRatingsArrayList = null;
+    public static int currentSelectedRow = 0;
+    public enum DialogType { SEARCH, FAVORITES, USER_SETTINGS, ABOUT };
 
     /*
         This is called when the service has completed letting us know to load the data.
@@ -53,6 +58,45 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
             }
         }
     };
+
+    /*
+        This class will inflate the menu file XML so it can be shown on the screen.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+
+        Log.v("TAG", "Creating Menu");
+        inflater.inflate(R.menu.action_bar_menu, menu);
+
+        return true;
+    }
+
+    /*
+        This is called when a user clicks on a menu item. We figure out which
+        icon the user clicked on and then load the appropriate DialogFragment
+        to display to the user.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_search:
+                Log.v("Menu Item", "Search");
+                break;
+            case R.id.menu_item_favorites:
+                Log.v("Menu Item", "Favorites");
+                break;
+            case R.id.menu_item_about:
+                Log.v("Menu Item", "About");
+                break;
+            case R.id.menu_item_user_settings:
+                Log.v("Menu Item", "User Settings");
+                break;
+        }
+
+        return true;
+    }
 
     /*
         Read the data from the local JSON file and populate the listView and also
@@ -106,6 +150,8 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
      */
     @Override
     public void BookSelected(int row) {
+        currentSelectedRow = row;
+        Log.v("activity row: ", ""+ row);
         loadBookDetails(row);
     }
 
@@ -127,6 +173,12 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
             booksArrayList = (ArrayList<HashMap<String, String>>) savedInstanceState.getSerializable("savedInstanceData");
             Log.v(TAG, "POPULATING WITH SAVED DATA");
             populateListView();
+
+            BookDetailsFragment bookDetailsFragment = (BookDetailsFragment) getFragmentManager().findFragmentById(R.id.fragment_book_details);
+            if (bookDetailsFragment != null && bookDetailsFragment.isInLayout()) {
+                BookSelected(currentSelectedRow);
+            }
+
         } else {
             /*
                 Check to see if the internet is available. If it is then start the service.
