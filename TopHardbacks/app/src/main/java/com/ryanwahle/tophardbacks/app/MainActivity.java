@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
     ArrayList<HashMap<String, String>> booksArrayList = null;
     ArrayList<HashMap<String, Float>> bookRatingsArrayList = null;
     public static int currentSelectedRow = 0;
-    public enum DialogType { SEARCH, FAVORITES, USER_SETTINGS, ABOUT };
+    public enum DialogType { SEARCH, PREFERENCES };
 
     /*
         This is called when the service has completed letting us know to load the data.
@@ -86,16 +86,23 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
                 break;
             case R.id.menu_item_favorites:
                 Log.v("Menu Item", "Favorites");
+                Intent favoritesActivityIntent = new Intent(this, FavoritesActivity.class);
+                startActivityForResult(favoritesActivityIntent, 0);
                 break;
-            case R.id.menu_item_about:
-                Log.v("Menu Item", "About");
-                break;
-            case R.id.menu_item_user_settings:
-                Log.v("Menu Item", "User Settings");
+            case R.id.menu_item_preferences:
+                Log.v("Menu Item", "Preferences");
                 break;
         }
 
         return true;
+    }
+
+    /*
+        This will launch the dialog fragment for either the search or the
+        preferences menu item.
+     */
+    public void launchDialogFragment(DialogType type) {
+
     }
 
     /*

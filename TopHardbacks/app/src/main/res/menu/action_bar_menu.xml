@@ -5,25 +5,20 @@
     <item
         android:id="@+id/menu_item_search"
         android:icon="@drawable/ic_menu_item_search"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="Search" />
 
     <item
         android:id="@+id/menu_item_favorites"
         android:icon="@drawable/ic_menu_item_favorites"
-        android:showAsAction="always"
+        android:showAsAction="ifRoom"
         android:title="Favorites" />
 
     <item
-        android:id="@+id/menu_item_about"
-        android:icon="@drawable/ic_menu_item_about"
-        android:showAsAction="always"
-        android:title="About" />
-
-    <item
-        android:id="@+id/menu_item_user_settings"
-        android:showAsAction="never"
-        android:title="User Settings" />
+        android:id="@+id/menu_item_preferences"
+        android:icon="@drawable/ic_menu_item_preferences"
+        android:showAsAction="ifRoom"
+        android:title="Preferences" />
 
 
 
