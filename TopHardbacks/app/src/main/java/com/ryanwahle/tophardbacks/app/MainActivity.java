@@ -10,10 +10,12 @@ package com.ryanwahle.tophardbacks.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +48,9 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
     ArrayList<HashMap<String, Float>> bookRatingsArrayList = null;
     public static int currentSelectedRow = 0;
     public enum DialogType { SEARCH, PREFERENCES };
+
+    public static SharedPreferences preferences = null;
+    public static SharedPreferences.Editor editPreferences = null;
 
     /*
         This is called when the service has completed letting us know to load the data.
@@ -83,6 +88,7 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         switch (item.getItemId()) {
             case R.id.menu_item_search:
                 Log.v("Menu Item", "Search");
+                launchDialogFragment(DialogType.SEARCH);
                 break;
             case R.id.menu_item_favorites:
                 Log.v("Menu Item", "Favorites");
@@ -91,6 +97,7 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
                 break;
             case R.id.menu_item_preferences:
                 Log.v("Menu Item", "Preferences");
+                launchDialogFragment(DialogType.PREFERENCES);
                 break;
         }
 
@@ -102,7 +109,10 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         preferences menu item.
      */
     public void launchDialogFragment(DialogType type) {
+        AlertDialogFragment alertDialogFragment = AlertDialogFragment.newInstance(type);
+        alertDialogFragment.show(getFragmentManager(), "");
 
+        Log.v("first name", preferences.getString("firstname", ""));
     }
 
     /*
@@ -167,10 +177,18 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editPreferences = preferences.edit();
+
         Messenger nytJSONServiceMessenger = new Messenger(nytJSONServiceHandler);
 
         Intent nytJSONServiceIntent = new Intent(this, NYTJSONService.class);
         nytJSONServiceIntent.putExtra("messenger", nytJSONServiceMessenger);
+
+        /*
+            Set the first and last name as the title
+         */
+        setTitle("Hi, " + preferences.getString("firstname", ""));
 
         /*
             If there is saved state instance then use that data instead of
@@ -295,3 +313,4 @@ public class MainActivity extends Activity implements BookListFragment.BookSelec
         alertBox.create().show();
     }
 }
+
