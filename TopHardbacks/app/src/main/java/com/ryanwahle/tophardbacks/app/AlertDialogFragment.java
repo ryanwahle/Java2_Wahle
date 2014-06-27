@@ -1,3 +1,10 @@
+/*
+    Author:     Ryan Wahle
+    Date:       26 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.app;
 
 import android.app.AlertDialog;

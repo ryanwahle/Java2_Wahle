@@ -1,3 +1,10 @@
+/*
+    Author:     Ryan Wahle
+    Date:       26 June 2014
+    School:     Full Sail University
+    Class:      Java 2 1406
+*/
+
 package com.ryanwahle.tophardbacks.app;
 
 import android.app.Activity;
@@ -10,6 +17,9 @@ import com.ryanwahle.tophardbacks.Utility.DataStorageSingleton;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+    This activity shows the average rating for books
+ */
 public class FavoritesActivity extends Activity {
 
     @Override
@@ -22,6 +32,9 @@ public class FavoritesActivity extends Activity {
 
         Float averageRating = 0.0f;
 
+        /*
+            Add all the ratings together
+         */
         for (HashMap<String, Float> bookRatingData : bookRatingsArray) {
             for (Float floatRating : bookRatingData.values()) {
                 Log.v("float", floatRating.toString());
@@ -29,8 +42,14 @@ public class FavoritesActivity extends Activity {
             }
         }
 
+        /*
+            Get the average of all the ratings
+         */
         averageRating = averageRating / bookRatingsArray.size();
 
+        /*
+            Show the average rating to the user.
+         */
         TextView textViewAverageRating = (TextView) findViewById(R.id.textViewAverageRating);
         textViewAverageRating.setText(averageRating.toString() + " Stars!");
     }
